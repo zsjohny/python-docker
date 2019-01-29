@@ -1,11 +1,10 @@
-FROM alpine
+FROM alpine:3.6.8-alpine3.8
+LABEL MAINTAINER Johny Zheng <shun.johny@gmail.com>
 
+# https://github.com/docker-library/python/blob/dd36c08c1f94083476a8579b8bf20c4cd46c6400/3.6/alpine3.8/Dockerfile
 # Update apk mirror
 RUN cp /etc/apk/repositories /etc/apk/repositories.bak
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # Install tools
-RUN apk update && apk add curl
-
-RUN apk add python3
-RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+RUN apk update && apk add curl bash

@@ -1,8 +1,41 @@
-FROM centos:7
+FROM centos:7.4.1708
+LABEL MAINTAINER Johny Zheng <shun.johny@gmail.com>
 
-# aliyun mirrors
-RUN yum install -y wget && wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-RUN yum makecache
+WORKDIR /tmp
+ENV PYTHON_VERSION=2.7.15
 
 RUN yum install -y epel-release
-RUN yum install -y python-pip
+RUN yum -y install wget sqlite-devel xz gcc automake make zlib-devel openssl-devel tar
+RUN yum clean all
+
+# Install Python
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
+tar xvf Python-${PYTHON_VERSION}.tar.xz  && cd Python-${PYTHON_VERSION} && ./configure && make && make install &&  \
+rm -rf /tmp/{Python-${PYTHON_VERSION}.tar.xz,${PYTHON_VERSION}}
+RUN mv /usr/bin/python /usr/bin/python2
+RUN ln -s /usr/local/bin/python3 /usr/bin/python && ln -s /usr/local/bin/pip3 /usr/bin/pip
+RUN sed -i 's@/usr/bin/python@/usr/bin/python2@g' /usr/bin/yum
+
+# if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
+ENV PYTHON_PIP_VERSION 19.0.1
+
+RUN set -ex; \
+	\
+	wget -O get-pip.py 'https://bootstrap.pypa.io/get-pip.py'; \
+	\
+	python get-pip.py \
+		--disable-pip-version-check \
+		--no-cache-dir \
+		"pip==$PYTHON_PIP_VERSION" \
+	; \
+	pip --version; \
+	\
+	find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests \) \) \
+			-o \
+			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+		\) -exec rm -rf '{}' +; \
+	rm -f get-pip.py
+
+CMD ["python3"]
