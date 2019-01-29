@@ -1,4 +1,4 @@
-FROM alpine:2.7-alpine3.8
+FROM python:2.7-alpine3.8
 LABEL MAINTAINER Johny Zheng <shun.johny@gmail.com>
 
 # https://github.com/docker-library/python/blob/dd36c08c1f94083476a8579b8bf20c4cd46c6400/2.7/alpine3.8/Dockerfile
