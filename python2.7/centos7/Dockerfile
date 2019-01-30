@@ -12,8 +12,8 @@ RUN yum clean all
 RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz && \
 tar xvf Python-${PYTHON_VERSION}.tar.xz  && cd Python-${PYTHON_VERSION} && ./configure && make && make install &&  \
 rm -rf /tmp/{Python-${PYTHON_VERSION}.tar.xz,${PYTHON_VERSION}}
-RUN mv /usr/bin/python /usr/bin/python2
-RUN ln -s /usr/local/bin/python3 /usr/bin/python && ln -s /usr/local/bin/pip3 /usr/bin/pip
+RUN ln -sf /usr/bin/python2.7 /usr/bin/python2
+RUN ln -sf /usr/local/bin/python3 /usr/bin/python && ln -sf /usr/local/bin/pip3 /usr/bin/pip
 RUN sed -i 's@/usr/bin/python@/usr/bin/python2@g' /usr/bin/yum
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
