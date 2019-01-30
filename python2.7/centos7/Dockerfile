@@ -15,6 +15,7 @@ rm -rf /tmp/{Python-${PYTHON_VERSION}.tar.xz,${PYTHON_VERSION}}
 RUN ln -sf /usr/bin/python2.7 /usr/bin/python2
 RUN ln -sf /usr/local/bin/python3 /usr/bin/python && ln -sf /usr/local/bin/pip3 /usr/bin/pip
 RUN sed -i 's@/usr/bin/python@/usr/bin/python2@g' /usr/bin/yum
+RUN sed -i 's@/usr/bin/python@/usr/bin/python2@g' /usr/libexec/urlgrabber-ext-down
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 ENV PYTHON_PIP_VERSION 19.0.1
